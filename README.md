@@ -1,0 +1,1 @@
+# NutriScanGO-Acceptance-Tests.
