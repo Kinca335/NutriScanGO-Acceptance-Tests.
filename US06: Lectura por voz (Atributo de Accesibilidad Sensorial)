@@ -1,0 +1,15 @@
+Feature: US06 Lectura por voz
+  Como usuario con dificultades visuales o adulto mayor
+  Deseo escuchar la lectura automática de ingredientes y alertas
+  Para comprender la información del producto sin necesidad de forzar la vista
+
+Scenario Outline: Ejecución del módulo Text-to-Speech (TTS)
+  Given que la pantalla de resultados del producto está activa
+  When el usuario presiona el botón de accesibilidad auditiva
+  And el idioma detectado en el dispositivo móvil es "<Idioma>"
+  Then el motor TTS sintetiza el texto en un archivo de voz con el mensaje "<Mensaje_Audio>"
+
+Examples:
+  | Idioma    | Mensaje_Audio                                       |
+  | Español   | "Advertencia: Este producto contiene lactosa."      |
+  | Inglés    | "Warning: This product contains lactose."           |
