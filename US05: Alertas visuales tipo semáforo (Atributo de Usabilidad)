@@ -1,0 +1,15 @@
+Feature: US05 Alertas visuales tipo semáforo
+  Como usuario adulto mayor
+  Deseo recibir alertas visuales mediante colores verde, amarillo y rojo
+  Para identificar fácilmente si un producto es apto para mi consumo
+
+Scenario Outline: Renderizado cromático según nivel de riesgo
+  Given que la lógica interna de análisis de ingredientes ha concluido
+  When el porcentaje de riesgo detectado se encuentra en el rango "<Rango_Riesgo>"
+  Then el sistema despliega en pantalla la interfaz con una alerta de color "<Color_Alerta>"
+
+Examples:
+  | Rango_Riesgo             | Color_Alerta |
+  | Seguro (0% riesgo)       | Verde        |
+  | Precaución (Trazas)      | Amarillo     |
+  | Peligro (Alérgeno act.)  | Rojo         |
