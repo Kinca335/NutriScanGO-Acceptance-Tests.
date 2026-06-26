@@ -1,0 +1,17 @@
+Feature: US03 Escaneo de código de barras
+  Como usuario con restricciones alimentarias
+  Deseo escanear el código de barras de un producto
+  Para verificar rápidamente si es seguro para mi consumo
+
+Scenario Outline: Identificación y análisis de compatibilidad de producto
+  Given que el usuario se encuentra en la pantalla de escaneo
+  And tiene configurada la restricción médica "<Restriccion>"
+  When el dispositivo lee el código de barras del producto "<Producto>"
+  Then el sistema identifica el producto dentro de la base de datos central
+  And determina que el estado de aptitud es "<Aptitud>"
+
+Examples:
+  | Restriccion           | Producto     | Aptitud  |
+  | Celíaco (Sin Gluten)  | Pan de Trigo | No Apto  |
+  | Sin Restricciones     | Agua Mineral | Apto     |
+  | Intolerante a Lactosa | Queso Crema  | No Apto  |
