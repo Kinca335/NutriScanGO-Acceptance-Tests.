@@ -1,0 +1,16 @@
+Feature: US10 Resultado del análisis
+  Como usuario que escanea un producto
+  Deseo visualizar inmediatamente el resultado del análisis
+  Para tomar una decisión rápida y segura durante la compra
+
+Scenario Outline: Despliegue de los resultados estructurados del producto
+  Given que el sistema de análisis ha procesado la información del artículo
+  When la evaluación médica del producto resulta en un estado "<Evaluacion>"
+  Then la pantalla renderiza el nombre del producto, sus ingredientes y la alerta pertinente
+  And muestra las recomendaciones específicas de salud "<Recomendacion>"
+
+Examples:
+  | Evaluacion    | Recomendacion                                       |
+  | Crítica       | "Peligro: Este producto contiene alérgenos activos" |
+  | Preventiva    | "Atención: El producto posee trazas sospechosas"    |
+  | Óptima        | "Seguro: Producto totalmente compatible"            |
