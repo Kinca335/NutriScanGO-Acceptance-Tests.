@@ -1,0 +1,15 @@
+Feature: US08 Consulta offline
+  Como usuario que realiza compras en lugares con poca señal de internet
+  Deseo acceder a información básica de productos y a mi perfil médico en modo offline
+  Para continuar utilizando la aplicación sin interrupciones
+
+Scenario Outline: Manejo de consultas mediante persistencia en caché local SQLite
+  Given que el dispositivo móvil no registra conectividad a internet (Modo Offline)
+  When el usuario abre la aplicación y consulta por un artículo "<Estado_Cache>"
+  Then el sistema redirige la consulta a la base de datos local persistida
+  And devuelve la respuesta correspondiente "<Mensaje_Pantalla>"
+
+Examples:
+  | Estado_Cache            | Mensaje_Pantalla                                       |
+  | Previamente almacenado  | "Mostrando datos desde el almacenamiento local."      |
+  | No registrado en caché  | "Función no disponible sin conexión para este artículo."|
