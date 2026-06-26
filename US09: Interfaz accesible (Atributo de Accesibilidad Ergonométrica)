@@ -1,0 +1,15 @@
+Feature: US09 Interfaz accesible
+  Como adulto mayor
+  Deseo utilizar una interfaz con letras grandes y botones visibles
+  Para navegar fácilmente por la aplicación sin experimentar fatiga visual
+
+Scenario Outline: Ajuste dinámico de componentes tipográficos de accesibilidad
+  Given que el usuario accede al panel de configuraciones del sistema
+  When activa el parámetro de visualización para la categoría "<Modo_Elegido>"
+  Then la aplicación reestructura las hojas de estilo variando el tamaño de fuente a "<Tamaño_Fuente>"
+  And el contraste de colores de fondo se define en "<Contraste>"
+
+Examples:
+  | Modo_Elegido   | Tamaño_Fuente | Contraste      |
+  | Estándar       | 14pt          | Regular        |
+  | Adulto Mayor   | 20pt          | Alto Contraste |
