@@ -20,12 +20,14 @@ Feature: US10 Resultado del análisis
     Given que el usuario está en la pantalla de resultados de un producto
     When el usuario pulsa el botón " Agregar a favoritos"
     Then el sistema agrega el producto a la lista de favoritos del usuario
-    And el ícono cambia de estrella vacía (☆) a estrella llena 
-    And muestra un mensaje emergente: " Producto agregado a favoritos"
+    And el ícono cambia de estrella vacía () a estrella llena ()
+    And muestra un mensaje emergente: "Producto agregado a favoritos"
 
   Scenario: Compartir resultado exitosamente
     Given que el usuario está en la pantalla de resultados de un producto
     When el usuario pulsa el botón " Compartir resultado"
-    Then el sistema abre el selector de aplicaciones del dispositivo con las opciones: WhatsApp, Correo electrónico, SMS y Copiar al portapapeles
-    And el mensaje compartido incluye: nombre del producto, alerta (ej. " NO APTO - Contiene Lactosa"), lista de ingredientes y fecha/hora del escaneo
+    Then el sistema abre el selector de aplicaciones del dispositivo con las opciones: 
+WhatsApp, Correo electrónico, SMS y Copiar al portapapeles
+    And el mensaje compartido incluye: nombre del producto, alerta 
+(ej. " NO APTO - Contiene Lactosa"), lista de ingredientes y fecha/hora del escaneo
     And el usuario selecciona la aplicación deseada y confirma el envío
