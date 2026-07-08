@@ -1,15 +1,22 @@
-Feature: US09 Interfaz accesible
-  Como adulto mayor
-  Deseo utilizar una interfaz con letras grandes y botones visibles
-  Para navegar fácilmente por la aplicación sin experimentar fatiga visual
+Feature: US09 Interfaz accesible con tutorial interactivo
+  Como adulto mayor o persona con baja visión
+  Deseo utilizar una interfaz accesible y un tutorial interactivo al primer inicio
+  Para navegar fácilmente y aprender a usar la aplicación sin ayuda externa
 
-Scenario Outline: Ajuste dinámico de componentes tipográficos de accesibilidad
-  Given que el usuario accede al panel de configuraciones del sistema
-  When activa el parámetro de visualización para la categoría "<Modo_Elegido>"
-  Then la aplicación reestructura las hojas de estilo variando el tamaño de fuente a "<Tamaño_Fuente>"
-  And el contraste de colores de fondo se define en "<Contraste>"
+  Scenario: Tutorial al primer inicio (Onboarding)
+    Given que el usuario abre la aplicación por primera vez después de la instalación
+    When la app se inicia
+    Then el sistema muestra un "Tour" de 4 pasos:
+    And Paso 1: "Registra tus alergias e intolerancias" con imagen ilustrativa
+    And Paso 2: "Escanea productos con la cámara" con imagen de la pantalla de escaneo
+    And Paso 3: "Recibe alertas visuales (Verde/Amarillo/Rojo)" con imagen de las alertas
+    And Paso 4: "Consulta tu historial y comparte resultados" con imagen del historial
+    And cada paso tiene un botón "Siguiente" y el último paso tiene "¡Empezar!"
+    And el usuario puede saltar el tutorial con un botón "Omitir" en la esquina superior derecha
 
-Examples:
-  | Modo_Elegido   | Tamaño_Fuente | Contraste      |
-  | Estándar       | 14pt          | Regular        |
-  | Adulto Mayor   | 20pt          | Alto Contraste |
+  Scenario: Interfaz accesible activada
+    Given que el usuario ingresa a las configuraciones de la aplicación
+    When el usuario activa el modo de accesibilidad visual
+    Then el sistema aumenta el tamaño de las fuentes a 18px mínimo
+    And aumenta el tamaño de los botones a 48px de altura mínimo
+    And aplica una paleta de colores de alto contraste en todas las pantallas (fondo oscuro con texto claro)
