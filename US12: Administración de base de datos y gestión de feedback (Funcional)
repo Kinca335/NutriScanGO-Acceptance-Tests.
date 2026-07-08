@@ -1,1 +1,50 @@
+US12: Administración de base de datos y gestión de feedback (Funcional)
 
+
+Escenario 1: Agregar un nuevo producto
+
+
+
+Contexto (Given): Given que el administrador inicia sesión en el Panel de Administración (vía web, con credenciales de rol "admin") y navega a la sección "Productos".
+
+Acción (When): When el administrador pulsa el botón "+ Agregar Producto" (color verde) y completa los siguientes campos obligatorios: Código de barras (13 dígitos, único, formato EAN-13), Nombre del producto (mínimo 3 caracteres), Lista de ingredientes (separados por comas), Categoría (Lácteos/Panadería/Bebidas/Carnes/Vegetales/Snacks/Otros) e Imagen del producto (opcional, JPG/PNG, máx. 2MB), y pulsa el botón "Guardar".
+
+Resultado esperado (Then): Then el sistema valida que el código no exista previamente, crea el nuevo registro y muestra el mensaje: "Producto 'Leche Deslactosada' agregado exitosamente".
+
+
+
+Escenario 2: Editar un producto existente
+
+
+
+Contexto (Given): Given que el administrador está en la lista de productos.
+
+Acción (When): When el administrador busca un producto por nombre o código, hace clic en el ícono de lápiz , modifica el campo "Lista de ingredientes" y pulsa el botón "Actualizar".
+
+Resultado esperado (Then): Then el sistema guarda los cambios y muestra el mensaje: " Producto actualizado correctamente".
+
+
+
+Escenario 3: Eliminar un producto obsoleto
+
+
+
+Contexto (Given): Given que el administrador ha seleccionado un producto específico de la lista.
+
+Acción (When): When el administrador hace clic en el ícono de papelera (🗑️) y confirma la eliminación en el cuadro de diálogo modal pulsando "Sí, eliminar".
+
+Resultado esperado (Then): Then el producto se elimina permanentemente de la base de datos y se muestra el mensaje: "🗑️ Producto eliminado correctamente".
+
+
+
+Escenario 4: Revisar reportes de errores de usuarios
+
+
+
+Contexto (Given): Given que un usuario ha enviado un reporte de error desde la aplicación.
+
+Acción (When): When el administrador accede a la sección "Reportes" del panel de administración.
+
+Resultado esperado (Then): Then el sistema muestra la lista de reportes con: Fecha del reporte, Usuario que lo envió, Producto afectado, Tipo de problema, Descripción y Foto adjunta. El administrador puede marcar el reporte como "Resuelto" o "En revisión".
+
+Resultado esperado (And): And el sistema notifica al usuario que su reporte fue atendido.
