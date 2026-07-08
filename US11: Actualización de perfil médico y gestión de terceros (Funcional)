@@ -14,9 +14,9 @@ Feature: US11 Actualización de perfil médico y gestión de terceros
 
     Examples:
       | Alergias        | Intolerancias | Condiciones_medicas | Mensaje                              |
-      | Maní, Mariscos  | Lactosa       | Diabetes Tipo 2     | ✅ Perfil actualizado correctamente   |
-      | Huevo           | Gluten        | Celiaquía           | ✅ Perfil actualizado correctamente   |
-      | Ninguna         | Ninguna       | Hipertensión        | ✅ Perfil actualizado correctamente   |
+      | Maní, Mariscos  | Lactosa       | Diabetes Tipo 2     | Perfil actualizado correctamente   |
+      | Huevo           | Gluten        | Celiaquía           | Perfil actualizado correctamente   |
+      | Ninguna         | Ninguna       | Hipertensión        |  Perfil actualizado correctamente   |
 
   Scenario Outline: Gestión de perfiles de terceros - Agregar paciente
     Given que el cuidador ha iniciado sesión y accede a la sección "Mis Pacientes"
@@ -30,8 +30,8 @@ Feature: US11 Actualización de perfil médico y gestión de terceros
 
     Examples:
       | Nombre    | Edad | Relacion | Alergias  | Intolerancias | Condiciones_medicas | Mensaje                                    |
-      | María     | 70   | Madre    | Ninguna   | Lactosa       | Hipertensión        | ✅ Perfil de María agregado exitosamente   |
-      | Carlos    | 82   | Padre    | Mariscos  | Gluten        | Diabetes Tipo 2     | ✅ Perfil de Carlos agregado exitosamente  |
+      | María     | 70   | Madre    | Ninguna   | Lactosa       | Hipertensión        |  Perfil de María agregado exitosamente   |
+      | Carlos    | 82   | Padre    | Mariscos  | Gluten        | Diabetes Tipo 2     |  Perfil de Carlos agregado exitosamente  |
 
   Scenario: Gestión de perfiles de terceros - Seleccionar perfil antes de escanear
     Given que el cuidador tiene varios perfiles de terceros registrados
