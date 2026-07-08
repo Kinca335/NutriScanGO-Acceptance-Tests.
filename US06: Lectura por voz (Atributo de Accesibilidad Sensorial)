@@ -3,13 +3,25 @@ Feature: US06 Lectura por voz
   Deseo activar la lectura por voz de los resultados
   Para comprender la información del producto sin necesidad de leer la pantalla
 
-  Scenario: Activación de lectura por voz
-    Given que el resultado del análisis está visible en pantalla con alerta y lista de ingredientes
-    When el usuario pulsa el botón " Escuchar información"
-    Then el sistema reproduce en voz alta: el nombre del producto, la lista de ingredientes detectados y la alerta correspondiente
+  Scenario Outline: Activación de lectura por voz
+    Given que el resultado del análisis está visible en pantalla con alerta "<Alerta>" y lista de ingredientes "<Ingredientes>"
+    When el usuario pulsa el botón "🔊 Escuchar información"
+    Then el sistema reproduce en voz alta: el nombre del producto "<Producto>", la lista de ingredientes detectados y la alerta correspondiente
     And la reproducción se puede pausar o detener con un botón flotante
 
-  Scenario: Lectura por voz con múltiples alérgenos
-    Given que el resultado del análisis muestra varios alérgenos
-    When el usuario pulsa el botón " Escuchar información"
-    Then el sistema lee: "Producto NO APTO. Contiene: lactosa, gluten y maní."
+    Examples:
+      | Producto            | Ingredientes              | Alerta              |
+      | Leche Deslactosada  | Leche, lactasa            | NO APTO – Contiene lactosa |
+      | Pan de Molde        | Harina de trigo, gluten   | NO APTO – Contiene gluten  |
+      | Agua Mineral        | Agua, minerales           | APTO – Producto seguro     |
+
+  Scenario Outline: Lectura por voz con múltiples alérgenos
+    Given que el resultado del análisis muestra los alérgenos "<Alergenos>"
+    When el usuario pulsa el botón "🔊 Escuchar información"
+    Then el sistema lee: "<Mensaje>"
+
+    Examples:
+      | Alergenos              | Mensaje                                          |
+      | lactosa, gluten y maní | Producto NO APTO. Contiene: lactosa, gluten y maní |
+      | soja y huevo           | Producto NO APTO. Contiene: soja y huevo          |
+      | gluten y lactosa       | Producto NO APTO. Contiene: gluten y lactosa      |
