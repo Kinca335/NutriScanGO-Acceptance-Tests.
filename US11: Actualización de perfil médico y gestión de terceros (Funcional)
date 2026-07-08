@@ -1,5 +1,7 @@
 US11: Actualización de perfil médico y gestión de terceros (Funcional)
 
+Escenario 1:
+
 
 Contexto (Given): Given que el usuario ha iniciado sesión en la aplicación y se encuentra en la sección "Mi Perfil" (accesible desde el menú principal con ícono de usuario).
 
