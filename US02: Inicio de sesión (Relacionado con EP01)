@@ -19,7 +19,7 @@ Feature: US02 Inicio de sesión y recuperación de contraseña
     Given que el usuario está en la pantalla de inicio de sesión
     When el usuario ingresa un correo no registrado o una contraseña errónea
     And pulsa el botón "Iniciar sesión"
-    Then el sistema muestra el mensaje: "⚠️ Correo o contraseña incorrectos. Intente nuevamente."
+    Then el sistema muestra el mensaje: " Correo o contraseña incorrectos. Intente nuevamente."
     And no permite el acceso
 
   Scenario: Solicitud de recuperación de contraseña
@@ -41,4 +41,4 @@ Feature: US02 Inicio de sesión y recuperación de contraseña
     And pulsa el botón "Restablecer contraseña"
     Then el sistema valida que las contraseñas coincidan y cumplan requisitos
     And actualiza la contraseña en la base de datos
-    And redirige al usuario al login con el mensaje: "✅ Contraseña restablecida exitosamente"
+    And redirige al usuario al login con el mensaje: "Contraseña restablecida exitosamente"
