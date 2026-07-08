@@ -1,16 +1,22 @@
 Feature: US04 Análisis OCR de ingredientes
   Como usuario que desea evaluar productos sin código de barras
-  Deseo capturar una imagen de la etiqueta
-  Para que el sistema analice automáticamente sus ingredientes
+  Deseo capturar una foto de la etiqueta para analizar sus ingredientes
+  Para obtener un análisis completo incluso cuando el código no está disponible
 
-Scenario Outline: Procesamiento de texto e identificación de alérgenos por OCR
-  Given que el usuario se encuentra en la interfaz de la función OCR
-  When captura una fotografía de calidad "<Calidad_Imagen>" de la tabla de ingredientes
-  Then el módulo OCR extrae las cadenas de texto del empaque
-  And muestra el estado del procesamiento "<Estado_Lectura>"
+  Scenario Outline: Captura y análisis exitoso de una etiqueta legible
+    Given que el usuario selecciona la opción "Analizar con OCR" y la cámara está activa
+    When el usuario toma una foto nítida de la lista de ingredientes "<Ingredientes>"
+    Then el sistema procesa la imagen, extrae el texto y lo normaliza
+    And compara cada ingrediente con las restricciones del perfil
+    And muestra el resultado con alerta "<Alerta>" y el mensaje "<Mensaje>"
 
-Examples:
-  | Calidad_Imagen | Estado_Lectura                                     |
-  | Alta (Nítida)  | "Ingredientes identificados exitosamente"          |
-  | Media (Sombra) | "Ingredientes identificados con advertencia"       |
-  | Baja (Borrosa) | "Error: Imagen poco legible, intente nuevamente"   |
+    Examples:
+      | Ingredientes                     | Alerta | Mensaje                              |
+      | Harina de trigo, azúcar, huevo   | Rojo   | 🔴 Contiene gluten (trigo) – NO APTO |
+      | Leche, lactasa                   | Verde  | ✅ APTO – Producto seguro             |
+
+  Scenario: Imagen borrosa o no reconocida
+    Given que el usuario está en la función OCR
+    When el usuario toma una foto desenfocada o no se detecta texto
+    Then el sistema muestra el mensaje: "⚠️ No se pudo leer la etiqueta. Por favor, tome otra foto con mejor iluminación y enfoque."
+    And habilita el botón "Reintentar"
