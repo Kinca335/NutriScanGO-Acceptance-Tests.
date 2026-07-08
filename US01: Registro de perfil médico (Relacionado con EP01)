@@ -33,3 +33,78 @@ Feature: US01 Registro y configuración inicial de perfil médico
     And pulsa el botón "Guardar Perfil"
     Then el sistema muestra el mensaje: "Las contraseñas no coinciden"
     And no permite avanzar hasta que coincidan
+
+Feature: US01 Registro y configuración inicial de perfil médico
+  Como persona con restricciones alimentarias
+  Deseo registrarme en la aplicación y configurar mi perfil médico
+  Para recibir análisis personalizados y alertas precisas según mi perfil
+
+  Scenario Outline: Registro exitoso con perfil completo
+    Given que el usuario abre la aplicación y selecciona "Registrarse"
+    When el usuario completa los campos: Nombre "<Nombre>", Correo "<Correo>", Contraseña "<Contraseña>"
+    And selecciona las alergias "<Alergias>", intolerancias "<Intolerancias>" y condiciones médicas "<Condiciones>"
+    And pulsa el botón "Guardar Perfil"
+    Then el sistema valida que todos los campos estén correctos
+    And almacena los datos en la base de usuarios
+    And muestra un mensaje emergente: "<Mensaje>"
+    And redirige al usuario a la pantalla principal
+
+    Examples:
+      | Nombre          | Correo               | Contraseña | Alergias      | Intolerancias | Condiciones      | Mensaje                                    |
+      | María Martínez  | maria@mail.com       | Abc123     | Maní, Mariscos | Lactosa       | Diabetes Tipo 2  | ✅ Perfil registrado exitosamente          |
+      | Luis Gamboa     | luis@mail.com        | Pass456    | Ninguna       | Gluten        | Celiaquía        | ✅ Perfil registrado exitosamente          |
+      | Ana Torres      | ana@mail.com         | Seguro789  | Huevo         | Ninguna       | Hipertensión     | ✅ Perfil registrado exitosamente          |
+
+  Scenario Outline: Error por campos obligatorios vacíos
+    Given que el usuario está en el formulario de registro
+    When el usuario deja vacío el campo "<Campo>" y pulsa "Guardar Perfil"
+    Then el sistema resalta el campo en rojo
+    And muestra el mensaje: "<Mensaje>"
+    And no permite avanzar hasta que se complete correctamente
+
+    Examples:
+      | Campo               | Mensaje                                      |
+      | Nombre completo     | ⚠️ El nombre completo es obligatorio         |
+      | Correo electrónico  | ⚠️ El correo electrónico es obligatorio      |
+      | Contraseña          | ⚠️ La contraseña es obligatoria              |
+
+  Scenario Outline: Error por contraseñas no coincidentes
+    Given que el usuario está en el formulario de registro
+    When el usuario ingresa Contraseña "<Contraseña>" y Confirmar contraseña "<Confirmar>"
+    And pulsa el botón "Guardar Perfil"
+    Then el sistema muestra el mensaje: "⚠️ Las contraseñas no coinciden"
+    And no permite avanzar hasta que coincidan
+
+    Examples:
+      | Contraseña | Confirmar |
+      | Abc123     | Abc456    |
+      | Pass2026   | Pass2025  |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
