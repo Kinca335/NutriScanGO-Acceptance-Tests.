@@ -17,25 +17,25 @@ Feature: US12 Administración de base de datos y gestión de feedback
     Examples:
       | Codigo        | Nombre              | Ingredientes                 | Categoria | Mensaje                                          |
       | 7501031311309 | Leche Deslactosada  | Leche, Lactasa               | Lácteos   | 
-✅ Producto 'Leche Deslactosada' agregado exitosamente |
+ Producto 'Leche Deslactosada' agregado exitosamente |
       | 7501000123401 | Pan de Molde        | Harina de trigo, Gluten      | Panadería | 
-✅ Producto 'Pan de Molde' agregado exitosamente       |
+ Producto 'Pan de Molde' agregado exitosamente       |
 
   Scenario: Editar un producto existente
     Given que el administrador está en la lista de productos
     When el administrador busca un producto por nombre o código
-    And hace clic en el ícono de lápiz (✏️) para editar
+    And hace clic en el ícono de lápiz para editar
     And modifica el campo "Lista de ingredientes"
     And pulsa el botón "Actualizar"
     Then el sistema guarda los cambios en la base de datos
-    And muestra el mensaje: "✅ Producto actualizado correctamente"
+    And muestra el mensaje: " Producto actualizado correctamente"
 
   Scenario: Eliminar un producto obsoleto
     Given que el administrador ha seleccionado un producto específico de la lista
-    When el administrador hace clic en el ícono de papelera (🗑️)
+    When el administrador hace clic en el ícono de papelera
     And confirma la eliminación en el cuadro de diálogo modal pulsando "Sí, eliminar"
     Then el producto se elimina permanentemente de la base de datos
-    And muestra el mensaje: "🗑️ Producto eliminado correctamente"
+    And muestra el mensaje: " Producto eliminado correctamente"
 
   Scenario Outline: Revisar reportes de errores de usuarios
     Given que un usuario ha enviado un reporte de error desde la aplicación
