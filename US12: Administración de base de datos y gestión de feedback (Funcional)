@@ -45,6 +45,10 @@ Feature: US12 Administración de base de datos y gestión de feedback
     And el sistema notifica al usuario que su reporte fue atendido
 
     Examples:
+
       | Estado        |
       | Resuelto      |
       | En revisión   |
+
+
+
