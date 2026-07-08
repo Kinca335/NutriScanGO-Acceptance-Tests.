@@ -3,14 +3,29 @@ Feature: US10 Resultado del análisis
   Deseo visualizar inmediatamente el resultado del análisis
   Para tomar una decisión rápida y segura durante la compra
 
-Scenario Outline: Despliegue de los resultados estructurados del producto
-  Given que el sistema de análisis ha procesado la información del artículo
-  When la evaluación médica del producto resulta en un estado "<Evaluacion>"
-  Then la pantalla renderiza el nombre del producto, sus ingredientes y la alerta pertinente
-  And muestra las recomendaciones específicas de salud "<Recomendacion>"
+  Scenario Outline: Despliegue de los resultados estructurados del producto
+    Given que el sistema de análisis ha procesado la información del artículo
+    When la evaluación médica del producto resulta en un estado "<Evaluacion>"
+    Then la pantalla renderiza el nombre del producto, sus ingredientes y la alerta pertinente
+    And muestra las recomendaciones específicas de salud "<Recomendacion>"
+    And muestra el botón " Agregar a favoritos" y el botón " Compartir resultado"
 
-Examples:
-  | Evaluacion    | Recomendacion                                       |
-  | Crítica       | "Peligro: Este producto contiene alérgenos activos" |
-  | Preventiva    | "Atención: El producto posee trazas sospechosas"    |
-  | Óptima        | "Seguro: Producto totalmente compatible"            |
+    Examples:
+      | Evaluacion    | Recomendacion                                       |
+      | Crítica       | "Peligro: Este producto contiene alérgenos activos" |
+      | Preventiva    | "Atención: El producto posee trazas sospechosas"    |
+      | Óptima        | "Seguro: Producto totalmente compatible"            |
+
+  Scenario: Agregar producto a favoritos
+    Given que el usuario está en la pantalla de resultados de un producto
+    When el usuario pulsa el botón " Agregar a favoritos"
+    Then el sistema agrega el producto a la lista de favoritos del usuario
+    And el ícono cambia de estrella vacía (☆) a estrella llena 
+    And muestra un mensaje emergente: " Producto agregado a favoritos"
+
+  Scenario: Compartir resultado exitosamente
+    Given que el usuario está en la pantalla de resultados de un producto
+    When el usuario pulsa el botón " Compartir resultado"
+    Then el sistema abre el selector de aplicaciones del dispositivo con las opciones: WhatsApp, Correo electrónico, SMS y Copiar al portapapeles
+    And el mensaje compartido incluye: nombre del producto, alerta (ej. " NO APTO - Contiene Lactosa"), lista de ingredientes y fecha/hora del escaneo
+    And el usuario selecciona la aplicación deseada y confirma el envío
