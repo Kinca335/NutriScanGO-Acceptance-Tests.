@@ -1,15 +1,24 @@
-Feature: US08 Consulta offline
-  Como usuario que realiza compras en lugares con poca señal de internet
-  Deseo acceder a información básica de productos y a mi perfil médico en modo offline
-  Para continuar utilizando la aplicación sin interrupciones
+Feature: US08 Consulta offline, sincronización y notificaciones
+  Como usuario que compra en zonas sin cobertura
+  Deseo utilizar la app sin conexión, sincronizar escaneos y recibir notificaciones
+  Para no interrumpir mis compras y estar al tanto de cambios en productos favoritos
 
-Scenario Outline: Manejo de consultas mediante persistencia en caché local SQLite
-  Given que el dispositivo móvil no registra conectividad a internet (Modo Offline)
-  When el usuario abre la aplicación y consulta por un artículo "<Estado_Cache>"
-  Then el sistema redirige la consulta a la base de datos local persistida
-  And devuelve la respuesta correspondiente "<Mensaje_Pantalla>"
+  Scenario: Acceso sin conexión a internet
+    Given que el dispositivo está en modo avión o sin datos móviles
+    When el usuario abre la aplicación
+    Then el sistema carga el perfil médico y el historial almacenados localmente en SQLite
+    And muestra un banner fijo: " Modo Offline – Los escaneos se guardarán y sincronizarán al recuperar la conexión"
+    And permite realizar escaneos de productos que ya estén en la caché local
 
-Examples:
-  | Estado_Cache            | Mensaje_Pantalla                                       |
-  | Previamente almacenado  | "Mostrando datos desde el almacenamiento local."      |
-  | No registrado en caché  | "Función no disponible sin conexión para este artículo."|
+  Scenario: Sincronización automática al recuperar conexión
+    Given que el usuario ha realizado escaneos en modo offline
+    When el dispositivo recupera la conexión a internet (WiFi o datos móviles)
+    Then el sistema detecta automáticamente los escaneos pendientes y los envía al servidor en segundo plano
+    And muestra un banner: " Sincronizando escaneos pendientes..." con indicador de progreso
+    And cuando finaliza, muestra: "Sincronización completada. X productos actualizados."
+
+  Scenario: Notificación por cambio de ingredientes en favorito
+    Given que un administrador ha editado un producto que el usuario tiene en favoritos, modificando sus ingredientes
+    When el administrador guarda los cambios
+    Then el sistema envía una notificación push al usuario: "El producto [Nombre] ha cambiado sus ingredientes. Revisa si sigue siendo apto para ti."
+    And al abrir la notificación, el usuario es redirigido al detalle del producto actualizado
