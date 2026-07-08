@@ -1,37 +1,41 @@
-US11: Actualización de perfil médico y gestión de terceros (Funcional)
+Feature: US11 Actualización de perfil médico y gestión de terceros
+  Como usuario registrado o cuidador
+  Deseo actualizar mi perfil médico y gestionar perfiles de familiares o pacientes a mi cargo
+  Para mantener mi información actualizada y permitir compras seguras para mis seres queridos
 
-Escenario 1:
+  Scenario Outline: Actualización exitosa del perfil médico
+    Given que el usuario ha iniciado sesión y se encuentra en la sección "Mi Perfil"
+    When el usuario modifica sus "<Alergias>", "<Intolerancias>" y "<Condiciones_medicas>"
+    And selecciona el botón "Actualizar Perfil"
+    Then el sistema valida que al menos una opción esté seleccionada
+    And guarda los cambios en la base de datos sobrescribiendo la configuración anterior
+    And muestra un mensaje emergente con el texto: "<Mensaje>"
+    And redirige al usuario a la pantalla de inicio
 
+    Examples:
+      | Alergias        | Intolerancias | Condiciones_medicas | Mensaje                              |
+      | Maní, Mariscos  | Lactosa       | Diabetes Tipo 2     | ✅ Perfil actualizado correctamente   |
+      | Huevo           | Gluten        | Celiaquía           | ✅ Perfil actualizado correctamente   |
+      | Ninguna         | Ninguna       | Hipertensión        | ✅ Perfil actualizado correctamente   |
 
-Contexto (Given): Given que el usuario ha iniciado sesión en la aplicación y se encuentra en la sección "Mi Perfil" (accesible desde el menú principal con ícono de usuario).
+  Scenario Outline: Gestión de perfiles de terceros - Agregar paciente
+    Given que el cuidador ha iniciado sesión y accede a la sección "Mis Pacientes"
+    When el cuidador pulsa el botón "+ Agregar persona"
+    And completa los campos: Nombre "<Nombre>", Edad "<Edad>", Relación "<Relacion>"
+    And selecciona las "<Alergias>", "<Intolerancias>" y "<Condiciones_medicas>" correspondientes
+    And pulsa el botón "Guardar"
+    Then el sistema valida los campos obligatorios
+    And guarda el perfil vinculado a la cuenta del cuidador
+    And muestra el mensaje: "<Mensaje>"
 
-Acción (When): When el usuario modifica uno o más de los siguientes campos: Alergias (checkboxes: Maní, Mariscos, Huevo, Soja, Frutos secos, Ninguna), Intolerancias (checkboxes: Lactosa, Gluten, Fructosa, Histamina, Ninguna) o Condiciones médicas (checkboxes: Diabetes Tipo 2, Hipertensión, Hígado Graso, Celiaquía, Enfermedad Renal, Ninguna) y selecciona el botón "Actualizar Perfil" (color azul, al final del formulario).
+    Examples:
+      | Nombre    | Edad | Relacion | Alergias  | Intolerancias | Condiciones_medicas | Mensaje                                    |
+      | María     | 70   | Madre    | Ninguna   | Lactosa       | Hipertensión        | ✅ Perfil de María agregado exitosamente   |
+      | Carlos    | 82   | Padre    | Mariscos  | Gluten        | Diabetes Tipo 2     | ✅ Perfil de Carlos agregado exitosamente  |
 
-Resultado esperado (Then): Then el sistema valida que al menos una opción esté seleccionada (o la casilla "Ninguna"), guarda los cambios en la base de datos sobrescribiendo la configuración anterior y muestra un mensaje emergente (toast) con el texto: "✅ Perfil actualizado correctamente".
-
-Resultado esperado (And): And redirige al usuario a la pantalla de inicio.
-
-
-
-
-Escenario 2: Gestión de perfiles de terceros (Cuidadores) - Agregar paciente
-
-
-
-Contexto (Given): Given que el cuidador ha iniciado sesión en su cuenta y accede a la sección "Mis Pacientes".
-
-Acción (When): When el cuidador pulsa el botón "+ Agregar persona" y completa los campos: Nombre completo (obligatorio), Edad, Relación (Padre/Madre/Abuelo/Paciente/Otro), Alergias (checkboxes), Intolerancias (checkboxes), Condiciones médicas (checkboxes) y Observaciones (opcional), y pulsa el botón "Guardar".
-
-Resultado esperado (Then): Then el sistema valida los campos, guarda el perfil vinculado a la cuenta del cuidador y muestra el mensaje: " Perfil de [Nombre] agregado exitosamente".
-
-
-
-Escenario 3: Gestión de perfiles de terceros - Seleccionar perfil antes de escanear
-
-
-
-Contexto (Given): Given que el cuidador tiene varios perfiles de terceros registrados.
-
-Acción (When): When el cuidador abre la cámara para escanear un producto y selecciona un perfil del selector desplegable en la parte superior con la opción "Escaneando para: [Seleccionar perfil]".
-
-Resultado esperado (Then): Then el sistema analiza el producto según las restricciones de ese perfil específico y muestra los resultados correspondientes.
+  Scenario: Gestión de perfiles de terceros - Seleccionar perfil antes de escanear
+    Given que el cuidador tiene varios perfiles de terceros registrados
+    When el cuidador abre la cámara para escanear un producto
+    And selecciona un perfil del selector desplegable "Escaneando para: [Seleccionar perfil]"
+    Then el sistema analiza el producto según las restricciones de ese perfil específico
+    And muestra los resultados correspondientes al perfil seleccionado
