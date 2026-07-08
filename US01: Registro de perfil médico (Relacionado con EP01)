@@ -1,19 +1,3 @@
-Feature: US01 Registro de perfil médico
-  Como persona con restricciones alimentarias
-  Deseo registrar mis alergias, intolerancias y condiciones médicas
-  Para recibir recomendaciones personalizadas sobre los productos que puedo consumir
-
-Scenario Outline: Registro y validación del perfil médico
-  Given que el usuario se encuentra en la pantalla de registro de perfil médico
-  When el usuario selecciona la condición "<Condicion_Ingresada>" y presiona Guardar
-  Then el sistema procesa la solicitud con estado "<Estado_Proceso>"
-  And muestra el mensaje de confirmación "<Mensaje_Visualizado>"
-
-Examples:
-  | Condicion_Ingresada   | Estado_Proceso | Mensaje_Visualizado                               |
-  | Intolerancia al Gluten| Exitoso        | "Perfil actualizado correctamente."               |
-  | Diabetes Tipo 2       | Exitoso        | "Perfil actualizado correctamente."               |
-  | Ninguna               | Error          | "Debe seleccionar al menos una condición médica." |
 
 Feature: US01 Registro y configuración inicial de perfil médico
   Como persona con restricciones alimentarias
@@ -32,20 +16,20 @@ Feature: US01 Registro y configuración inicial de perfil médico
 
     Examples:
       | Nombre          | Correo               | Contraseña | Alergias      | Intolerancias | Condiciones      | Mensaje                                    |
-      | María Martínez  | maria@mail.com       | Abc123     | Maní, Mariscos | Lactosa       | Diabetes Tipo 2  | ✅ Perfil registrado exitosamente          |
-      | Luis Gamboa     | luis@mail.com        | Pass456    | Ninguna       | Gluten        | Celiaquía        | ✅ Perfil registrado exitosamente          |
+      | María Martínez  | maria@mail.com       | Abc123     | Maní, Mariscos | Lactosa       | Diabetes Tipo 2  | Perfil registrado exitosamente          |
+      | Luis Gamboa     | luis@mail.com        | Pass456    | Ninguna       | Gluten        | Celiaquía        | Perfil registrado exitosamente          |
 
   Scenario: Error por campos obligatorios vacíos
     Given que el usuario está en el formulario de registro
     When el usuario deja vacío el campo "Correo electrónico"
     And pulsa el botón "Guardar Perfil"
     Then el sistema resalta el campo en rojo
-    And muestra el mensaje: "⚠️ El correo electrónico es obligatorio"
+    And muestra el mensaje: " El correo electrónico es obligatorio"
     And no permite avanzar hasta que se complete correctamente
 
   Scenario: Error por contraseñas no coincidentes
     Given que el usuario está en el formulario de registro
     When el usuario ingresa Contraseña "Abc123" y Confirmar contraseña "Abc456"
     And pulsa el botón "Guardar Perfil"
-    Then el sistema muestra el mensaje: "⚠️ Las contraseñas no coinciden"
+    Then el sistema muestra el mensaje: "Las contraseñas no coinciden"
     And no permite avanzar hasta que coincidan
