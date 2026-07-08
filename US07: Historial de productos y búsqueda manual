@@ -1,1 +1,22 @@
+Feature: US07 Historial de productos y búsqueda manual
+  Como usuario frecuente de la aplicación
+  Deseo consultar mi historial de productos y buscar productos previamente analizados
+  Para agilizar mis compras sin tener que escanear nuevamente
 
+  Scenario: Visualización del historial con filtros
+    Given que el usuario ha realizado al menos 3 escaneos previos
+    When el usuario accede a la sección "Historial" desde el menú principal
+    Then el sistema muestra una lista ordenada por fecha con: nombre del producto, fecha y hora del escaneo y alerta (color y texto)
+    And permite filtrar por: "Todos", "Aptos" o "No aptos" mediante pestañas o botones
+    And al hacer clic en un producto, se abre el detalle completo
+
+  Scenario Outline: Búsqueda manual de productos
+    Given que el usuario está en la sección "Historial"
+    When el usuario ingresa "<Texto>" en la barra de búsqueda con lupa 🔍
+    Then el sistema filtra la lista y muestra solo los productos que coinciden con la búsqueda
+
+    Examples:
+      | Texto         |
+      | Leche         |
+      | Pan           |
+      | 7501031311309 |
