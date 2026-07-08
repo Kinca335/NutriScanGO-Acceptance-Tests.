@@ -3,20 +3,30 @@ Feature: US09 Interfaz accesible con tutorial interactivo
   Deseo utilizar una interfaz accesible y un tutorial interactivo al primer inicio
   Para navegar fácilmente y aprender a usar la aplicación sin ayuda externa
 
-  Scenario: Tutorial al primer inicio (Onboarding)
+  Scenario Outline: Tutorial al primer inicio (Onboarding)
     Given que el usuario abre la aplicación por primera vez después de la instalación
     When la app se inicia
     Then el sistema muestra un "Tour" de 4 pasos:
-    And Paso 1: "Registra tus alergias e intolerancias" con imagen ilustrativa
-    And Paso 2: "Escanea productos con la cámara" con imagen de la pantalla de escaneo
-    And Paso 3: "Recibe alertas visuales (Verde/Amarillo/Rojo)" con imagen de las alertas
-    And Paso 4: "Consulta tu historial y comparte resultados" con imagen del historial
+    And Paso "<Numero>": "<Titulo>" con imagen ilustrativa
     And cada paso tiene un botón "Siguiente" y el último paso tiene "¡Empezar!"
     And el usuario puede saltar el tutorial con un botón "Omitir" en la esquina superior derecha
 
-  Scenario: Interfaz accesible activada
+    Examples:
+      | Numero | Titulo                                          |
+      | 1      | Registra tus alergias e intolerancias          |
+      | 2      | Escanea productos con la cámara               |
+      | 3      | Recibe alertas visuales (Verde/Amarillo/Rojo) |
+      | 4      | Consulta tu historial y comparte resultados   |
+
+  Scenario Outline: Interfaz accesible activada
     Given que el usuario ingresa a las configuraciones de la aplicación
     When el usuario activa el modo de accesibilidad visual
-    Then el sistema aumenta el tamaño de las fuentes a 18px mínimo
-    And aumenta el tamaño de los botones a 48px de altura mínimo
+    Then el sistema aumenta el tamaño de las fuentes a "<Tamano_fuente>" mínimo
+    And aumenta el tamaño de los botones a "<Tamano_boton>" de altura mínimo
     And aplica una paleta de colores de alto contraste en todas las pantallas (fondo oscuro con texto claro)
+
+    Examples:
+      | Tamano_fuente | Tamano_boton |
+      | 18px          | 48px         |
+      | 20px          | 52px         |
+      | 22px          | 56px         |
