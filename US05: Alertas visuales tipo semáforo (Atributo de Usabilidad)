@@ -1,15 +1,23 @@
 Feature: US05 Alertas visuales tipo semáforo
-  Como usuario adulto mayor
+  Como adulto mayor o usuario con dificultades de comprensión lectora
   Deseo recibir alertas visuales mediante colores verde, amarillo y rojo
-  Para identificar fácilmente si un producto es apto para mi consumo
+  Para identificar rápidamente el nivel de riesgo del producto de forma intuitiva
 
-Scenario Outline: Renderizado cromático según nivel de riesgo
-  Given que la lógica interna de análisis de ingredientes ha concluido
-  When el porcentaje de riesgo detectado se encuentra en el rango "<Rango_Riesgo>"
-  Then el sistema despliega en pantalla la interfaz con una alerta de color "<Color_Alerta>"
+  Scenario Outline: Visualización de alerta según nivel de riesgo
+    Given que el sistema ha completado el análisis de un producto
+    When el resultado es "<Estado>"
+    Then el sistema muestra un círculo de color "<Color>" con el texto "<Texto>"
+    And la alerta ocupa al menos el 40% de la pantalla
+    And es visible sin necesidad de desplazarse
 
-Examples:
-  | Rango_Riesgo             | Color_Alerta |
-  | Seguro (0% riesgo)       | Verde        |
-  | Precaución (Trazas)      | Amarillo     |
-  | Peligro (Alérgeno act.)  | Rojo         |
+    Examples:
+      | Estado              | Color  | Texto            |
+      | Producto completamente apto | Verde  |  APTO          |
+      | Contiene alérgenos críticos | Rojo   |  NO APTO       |
+      | Información dudosa o incompleta | Amarillo |  PRECAUCIÓN |
+
+  Scenario: Combinación de varios alérgenos
+    Given que el sistema ha completado el análisis de un producto
+    When el producto contiene dos ingredientes que coinciden con alergias (ej. maní y gluten)
+    Then la alerta es Roja
+    And el mensaje especifica: " Contiene maní y gluten – NO APTO"
