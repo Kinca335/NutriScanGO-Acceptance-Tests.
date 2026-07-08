@@ -3,22 +3,40 @@ Feature: US08 Consulta offline, sincronización y notificaciones
   Deseo utilizar la app sin conexión, sincronizar escaneos y recibir notificaciones
   Para no interrumpir mis compras y estar al tanto de cambios en productos favoritos
 
-  Scenario: Acceso sin conexión a internet
+  Scenario Outline: Acceso sin conexión a internet
     Given que el dispositivo está en modo avión o sin datos móviles
     When el usuario abre la aplicación
     Then el sistema carga el perfil médico y el historial almacenados localmente en SQLite
-    And muestra un banner fijo: " Modo Offline – Los escaneos se guardarán y sincronizarán al recuperar la conexión"
+    And muestra un banner fijo: "📶 Modo Offline – Los escaneos se guardarán y sincronizarán al recuperar la conexión"
     And permite realizar escaneos de productos que ya estén en la caché local
 
-  Scenario: Sincronización automática al recuperar conexión
-    Given que el usuario ha realizado escaneos en modo offline
+    Examples:
+      | Estado_conexion |
+      | modo avión      |
+      | sin datos móviles |
+      | WiFi apagado    |
+
+  Scenario Outline: Sincronización automática al recuperar conexión
+    Given que el usuario ha realizado "<Cantidad>" escaneos en modo offline
     When el dispositivo recupera la conexión a internet (WiFi o datos móviles)
     Then el sistema detecta automáticamente los escaneos pendientes y los envía al servidor en segundo plano
-    And muestra un banner: " Sincronizando escaneos pendientes..." con indicador de progreso
-    And cuando finaliza, muestra: "Sincronización completada. X productos actualizados."
+    And muestra un banner: "🔄 Sincronizando escaneos pendientes..." con indicador de progreso
+    And cuando finaliza, muestra: "✅ Sincronización completada. <Cantidad> productos actualizados."
 
-  Scenario: Notificación por cambio de ingredientes en favorito
-    Given que un administrador ha editado un producto que el usuario tiene en favoritos, modificando sus ingredientes
-    When el administrador guarda los cambios
-    Then el sistema envía una notificación push al usuario: "El producto [Nombre] ha cambiado sus ingredientes. Revisa si sigue siendo apto para ti."
+    Examples:
+      | Cantidad |
+      | 1        |
+      | 3        |
+      | 5        |
+
+  Scenario Outline: Notificación por cambio de ingredientes en favorito
+    Given que un administrador ha editado un producto que el usuario tiene en favoritos
+    When el administrador guarda los cambios en "<Producto>"
+    Then el sistema envía una notificación push al usuario: "⚠️ El producto <Producto> ha cambiado sus ingredientes. Revisa si sigue siendo apto para ti."
     And al abrir la notificación, el usuario es redirigido al detalle del producto actualizado
+
+    Examples:
+      | Producto            |
+      | Leche Deslactosada  |
+      | Pan de Molde        |
+      | Galletas Integrales |
