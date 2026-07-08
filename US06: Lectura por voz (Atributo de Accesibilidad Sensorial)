@@ -5,11 +5,11 @@ Feature: US06 Lectura por voz
 
   Scenario: Activación de lectura por voz
     Given que el resultado del análisis está visible en pantalla con alerta y lista de ingredientes
-    When el usuario pulsa el botón "🔊 Escuchar información"
+    When el usuario pulsa el botón " Escuchar información"
     Then el sistema reproduce en voz alta: el nombre del producto, la lista de ingredientes detectados y la alerta correspondiente
     And la reproducción se puede pausar o detener con un botón flotante
 
   Scenario: Lectura por voz con múltiples alérgenos
     Given que el resultado del análisis muestra varios alérgenos
-    When el usuario pulsa el botón "🔊 Escuchar información"
+    When el usuario pulsa el botón " Escuchar información"
     Then el sistema lee: "Producto NO APTO. Contiene: lactosa, gluten y maní."
