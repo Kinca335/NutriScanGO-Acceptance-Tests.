@@ -1,16 +1,44 @@
-Feature: US02 Inicio de sesión
+Feature: US02 Inicio de sesión y recuperación de contraseña
   Como usuario registrado
-  Deseo iniciar sesión en la aplicación
-  Para acceder a mi perfil médico y a mi historial de consultas
+  Deseo iniciar sesión y recuperar mi contraseña si la olvido
+  Para acceder a mi perfil e historial de forma segura
 
-Scenario Outline: Autenticación de usuarios y control de acceso
-  Given que el usuario se encuentra en la pantalla de inicio de sesión
-  When ingresa el correo "<Correo>" y la contraseña "<Password>"
-  Then el sistema valida las credenciales y devuelve el acceso "<Permiso>"
-  And redirige a la pantalla o vista "<Pantalla_Destino>"
+  Scenario Outline: Inicio de sesión con credenciales válidas
+    Given que el usuario ya tiene una cuenta registrada
+    When el usuario ingresa Correo "<Correo>" y Contraseña "<Contraseña>"
+    And pulsa el botón "Iniciar sesión"
+    Then el sistema verifica las credenciales
+    And autentica al usuario y muestra la pantalla de inicio
 
-Examples:
-  | Correo               | Password     | Permiso   | Pantalla_Destino  |
-  | usuario@correo.com   | 12345678     | Concedido | Pantalla Principal|
-  | error@correo.com     | 12345678     | Denegado  | Pantalla de Login |
-  | usuario@correo.com   | claveFalsa   | Denegado  | Pantalla de Login |
+    Examples:
+      | Correo               | Contraseña |
+      | usuario@test.com     | Abc123     |
+      | adulto.mayor@mail.com | abcd1234  |
+
+  Scenario: Credenciales incorrectas
+    Given que el usuario está en la pantalla de inicio de sesión
+    When el usuario ingresa un correo no registrado o una contraseña errónea
+    And pulsa el botón "Iniciar sesión"
+    Then el sistema muestra el mensaje: "⚠️ Correo o contraseña incorrectos. Intente nuevamente."
+    And no permite el acceso
+
+  Scenario: Solicitud de recuperación de contraseña
+    Given que el usuario está en la pantalla de inicio de sesión
+    When el usuario pulsa el enlace "¿Olvidaste tu contraseña?"
+    And ingresa su Correo "<Correo>" y pulsa "Enviar enlace de recuperación"
+    Then el sistema verifica que el correo esté registrado
+    And envía un enlace único (válido por 30 minutos) al correo
+    And muestra el mensaje: "📧 Se ha enviado un enlace de recuperación a tu correo electrónico."
+
+    Examples:
+      | Correo               |
+      | usuario@test.com     |
+      | adulto.mayor@mail.com |
+
+  Scenario: Restablecimiento de contraseña exitoso
+    Given que el usuario hace clic en el enlace de recuperación del correo
+    When el usuario ingresa Nueva contraseña "NuevaPass123" y Confirmar contraseña "NuevaPass123"
+    And pulsa el botón "Restablecer contraseña"
+    Then el sistema valida que las contraseñas coincidan y cumplan requisitos
+    And actualiza la contraseña en la base de datos
+    And redirige al usuario al login con el mensaje: "✅ Contraseña restablecida exitosamente"
