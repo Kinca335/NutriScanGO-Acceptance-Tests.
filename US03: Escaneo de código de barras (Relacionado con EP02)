@@ -1,17 +1,25 @@
 Feature: US03 Escaneo de código de barras
   Como usuario con restricciones alimentarias
-  Deseo escanear el código de barras de un producto
-  Para verificar rápidamente si es seguro para mi consumo
+  Deseo escanear el código de barras de un producto usando la cámara
+  Para conocer al instante si el producto es apto para mi consumo
 
-Scenario Outline: Identificación y análisis de compatibilidad de producto
-  Given que el usuario se encuentra en la pantalla de escaneo
-  And tiene configurada la restricción médica "<Restriccion>"
-  When el dispositivo lee el código de barras del producto "<Producto>"
-  Then el sistema identifica el producto dentro de la base de datos central
-  And determina que el estado de aptitud es "<Aptitud>"
+  Scenario Outline: Escaneo exitoso de producto con código válido
+    Given que el usuario está en la pantalla de escaneo y la cámara está activa
+    When el usuario enfoca el código de barras "<Codigo>" y el sistema lo detecta automáticamente
+    Then el sistema consulta la base de datos y recupera el producto "<Producto>"
+    And compara los ingredientes con el perfil médico del usuario
+    And muestra una tarjeta emergente con la alerta "<Alerta>" y el mensaje "<Mensaje>"
+    And muestra el botón "Ver detalles"
 
-Examples:
-  | Restriccion           | Producto     | Aptitud  |
-  | Celíaco (Sin Gluten)  | Pan de Trigo | No Apto  |
-  | Sin Restricciones     | Agua Mineral | Apto     |
-  | Intolerante a Lactosa | Queso Crema  | No Apto  |
+    Examples:
+      | Codigo          | Producto            | Alerta | Mensaje                              |
+      | 7501031311309   | Leche Deslactosada  | Rojo   |  NO APTO – Contiene Lactosa        |
+      | 7501000123401   | Pan de Molde        | Rojo   |  NO APTO – Contiene Gluten         |
+      | 7702137000220   | Agua Mineral        | Verde  |  APTO – Producto seguro             |
+
+  Scenario: Producto no encontrado en la base de datos
+    Given que el usuario está en la pantalla de escaneo
+    When el usuario escanea un código no registrado "0000000000000"
+    Then el sistema muestra una alerta Amarilla
+    And muestra el mensaje: "Producto no encontrado. Sugerimos usar OCR para analizar la etiqueta."
+    And ofrece un botón para cambiar a la función OCR
