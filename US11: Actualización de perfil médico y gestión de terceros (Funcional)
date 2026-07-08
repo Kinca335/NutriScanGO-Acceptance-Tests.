@@ -13,7 +13,7 @@ Feature: US11 Actualización de perfil médico y gestión de terceros
     And redirige al usuario a la pantalla de inicio
 
     Examples:
-      | Alergias        | Intolerancias | Condiciones_medicas | Mensaje                              |
+      | Alergias        | Intolerancias | Condiciones_medicas |  Mensaje                              |
       | Maní, Mariscos  | Lactosa       | Diabetes Tipo 2     | Perfil actualizado correctamente   |
       | Huevo           | Gluten        | Celiaquía           | Perfil actualizado correctamente   |
       | Ninguna         | Ninguna       | Hipertensión        |  Perfil actualizado correctamente   |
