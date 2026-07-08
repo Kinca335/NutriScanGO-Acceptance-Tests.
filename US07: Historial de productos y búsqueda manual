@@ -12,7 +12,7 @@ Feature: US07 Historial de productos y búsqueda manual
 
   Scenario Outline: Búsqueda manual de productos
     Given que el usuario está en la sección "Historial"
-    When el usuario ingresa "<Texto>" en la barra de búsqueda con lupa 🔍
+    When el usuario ingresa "<Texto>" en la barra de búsqueda con lupa 
     Then el sistema filtra la lista y muestra solo los productos que coinciden con la búsqueda
 
     Examples:
