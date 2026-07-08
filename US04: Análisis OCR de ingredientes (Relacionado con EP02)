@@ -12,11 +12,11 @@ Feature: US04 Análisis OCR de ingredientes
 
     Examples:
       | Ingredientes                     | Alerta | Mensaje                              |
-      | Harina de trigo, azúcar, huevo   | Rojo   | 🔴 Contiene gluten (trigo) – NO APTO |
-      | Leche, lactasa                   | Verde  | ✅ APTO – Producto seguro             |
+      | Harina de trigo, azúcar, huevo   | Rojo   | Contiene gluten (trigo) – NO APTO |
+      | Leche, lactasa                   | Verde  |  APTO – Producto seguro             |
 
   Scenario: Imagen borrosa o no reconocida
     Given que el usuario está en la función OCR
     When el usuario toma una foto desenfocada o no se detecta texto
-    Then el sistema muestra el mensaje: "⚠️ No se pudo leer la etiqueta. Por favor, tome otra foto con mejor iluminación y enfoque."
+    Then el sistema muestra el mensaje: " No se pudo leer la etiqueta. Por favor, tome otra foto con mejor iluminación y enfoque."
     And habilita el botón "Reintentar"
