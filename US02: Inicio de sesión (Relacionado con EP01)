@@ -14,15 +14,22 @@ Feature: US02 Inicio de sesión y recuperación de contraseña
       | Correo               | Contraseña |
       | usuario@test.com     | Abc123     |
       | adulto.mayor@mail.com | abcd1234  |
+      | cuidador@mail.com    | Pass2026   |
 
-  Scenario: Credenciales incorrectas
+  Scenario Outline: Credenciales incorrectas
     Given que el usuario está en la pantalla de inicio de sesión
-    When el usuario ingresa un correo no registrado o una contraseña errónea
+    When el usuario ingresa Correo "<Correo>" y Contraseña "<Contraseña>"
     And pulsa el botón "Iniciar sesión"
-    Then el sistema muestra el mensaje: " Correo o contraseña incorrectos. Intente nuevamente."
+    Then el sistema muestra el mensaje: "⚠️ Correo o contraseña incorrectos. Intente nuevamente."
     And no permite el acceso
 
-  Scenario: Solicitud de recuperación de contraseña
+    Examples:
+      | Correo               | Contraseña |
+      | usuario@test.com     | WrongPass  |
+      | noexiste@mail.com    | Abc123     |
+      | adulto.mayor@mail.com | 1234      |
+
+  Scenario Outline: Solicitud de recuperación de contraseña
     Given que el usuario está en la pantalla de inicio de sesión
     When el usuario pulsa el enlace "¿Olvidaste tu contraseña?"
     And ingresa su Correo "<Correo>" y pulsa "Enviar enlace de recuperación"
@@ -34,11 +41,18 @@ Feature: US02 Inicio de sesión y recuperación de contraseña
       | Correo               |
       | usuario@test.com     |
       | adulto.mayor@mail.com |
+      | cuidador@mail.com    |
 
-  Scenario: Restablecimiento de contraseña exitoso
+  Scenario Outline: Restablecimiento de contraseña exitoso
     Given que el usuario hace clic en el enlace de recuperación del correo
-    When el usuario ingresa Nueva contraseña "NuevaPass123" y Confirmar contraseña "NuevaPass123"
+    When el usuario ingresa Nueva contraseña "<Nueva>" y Confirmar contraseña "<Confirmar>"
     And pulsa el botón "Restablecer contraseña"
     Then el sistema valida que las contraseñas coincidan y cumplan requisitos
     And actualiza la contraseña en la base de datos
-    And redirige al usuario al login con el mensaje: "Contraseña restablecida exitosamente"
+    And redirige al usuario al login con el mensaje: "✅ Contraseña restablecida exitosamente"
+
+    Examples:
+      | Nueva       | Confirmar   |
+      | NuevaPass123 | NuevaPass123 |
+      | Seguro2026  | Seguro2026   |
+      | Cambio456   | Cambio456    |
