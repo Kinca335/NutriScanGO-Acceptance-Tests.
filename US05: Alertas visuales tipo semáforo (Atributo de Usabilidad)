@@ -11,13 +11,19 @@ Feature: US05 Alertas visuales tipo semáforo
     And es visible sin necesidad de desplazarse
 
     Examples:
-      | Estado              | Color  | Texto            |
-      | Producto completamente apto | Verde  |  APTO          |
-      | Contiene alérgenos críticos | Rojo   |  NO APTO       |
-      | Información dudosa o incompleta | Amarillo |  PRECAUCIÓN |
+      | Estado                                  | Color  | Texto            |
+      | Producto completamente apto             | Verde  | ✅ APTO          |
+      | Contiene alérgenos críticos             | Rojo   | 🔴 NO APTO       |
+      | Información dudosa o incompleta         | Amarillo | 🟡 PRECAUCIÓN |
 
-  Scenario: Combinación de varios alérgenos
+  Scenario Outline: Combinación de varios alérgenos
     Given que el sistema ha completado el análisis de un producto
-    When el producto contiene dos ingredientes que coinciden con alergias (ej. maní y gluten)
+    When el producto contiene los siguientes alérgenos "<Alergenos>"
     Then la alerta es Roja
-    And el mensaje especifica: " Contiene maní y gluten – NO APTO"
+    And el mensaje especifica: "<Mensaje>"
+
+    Examples:
+      | Alergenos              | Mensaje                                      |
+      | maní y gluten          | 🔴 Contiene maní y gluten – NO APTO         |
+      | lactosa y huevo        | 🔴 Contiene lactosa y huevo – NO APTO       |
+      | soja, gluten y maní    | 🔴 Contiene soja, gluten y maní – NO APTO   |
