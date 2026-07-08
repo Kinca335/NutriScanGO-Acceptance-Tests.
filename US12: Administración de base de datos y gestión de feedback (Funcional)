@@ -16,26 +16,49 @@ Feature: US12 Administración de base de datos y gestión de feedback
 
     Examples:
       | Codigo        | Nombre              | Ingredientes                 | Categoria | Mensaje                                          |
-      | 7501031311309 | Leche Deslactosada  | Leche, Lactasa               | Lácteos   | 
- Producto 'Leche Deslactosada' agregado exitosamente |
-      | 7501000123401 | Pan de Molde        | Harina de trigo, Gluten      | Panadería | 
- Producto 'Pan de Molde' agregado exitosamente       |
+      | 7501031311309 | Leche Deslactosada  | Leche, Lactasa               | Lácteos   | ✅ Producto 'Leche Deslactosada' agregado exitosamente |
+      | 7501000123401 | Pan de Molde        | Harina de trigo, Gluten      | Panadería | ✅ Producto 'Pan de Molde' agregado exitosamente       |
+      | 7503001234567 | Galletas Integrales | Harina integral, azúcar, soja | Snacks    | ✅ Producto 'Galletas Integrales' agregado exitosamente |
+      | 7502000987654 | Queso Fresco        | Leche, cuajo                  | Lácteos   | ✅ Producto 'Queso Fresco' agregado exitosamente       |
 
-  Scenario: Editar un producto existente
+  Scenario Outline: Editar un producto existente
     Given que el administrador está en la lista de productos
-    When el administrador busca un producto por nombre o código
-    And hace clic en el ícono de lápiz para editar
-    And modifica el campo "Lista de ingredientes"
+    When el administrador busca el producto "<Producto>" por nombre o código
+    And hace clic en el ícono de lápiz (✏️) para editar
+    And modifica el campo "<Campo>" a "<Valor>"
     And pulsa el botón "Actualizar"
     Then el sistema guarda los cambios en la base de datos
-    And muestra el mensaje: " Producto actualizado correctamente"
+    And muestra el mensaje: "✅ Producto actualizado correctamente"
 
-  Scenario: Eliminar un producto obsoleto
-    Given que el administrador ha seleccionado un producto específico de la lista
-    When el administrador hace clic en el ícono de papelera
+    Examples:
+      | Producto            | Campo                | Valor                    |
+      | Leche Deslactosada  | Lista de ingredientes | Leche, Lactasa, Vitamina A |
+      | Pan de Molde        | Nombre               | Pan de Molde Integral     |
+
+  Scenario Outline: Eliminar un producto obsoleto
+    Given que el administrador ha seleccionado el producto "<Producto>" de la lista
+    When el administrador hace clic en el ícono de papelera (🗑️)
     And confirma la eliminación en el cuadro de diálogo modal pulsando "Sí, eliminar"
     Then el producto se elimina permanentemente de la base de datos
-    And muestra el mensaje: " Producto eliminado correctamente"
+    And muestra el mensaje: "🗑️ Producto eliminado correctamente"
+
+    Examples:
+      | Producto            |
+      | Leche Deslactosada  |
+      | Pan de Molde        |
+
+  Scenario Outline: Error por código de barras duplicado
+    Given que el administrador intenta agregar un nuevo producto
+    When ingresa un Código de barras que ya existe "<Codigo>"
+    And pulsa el botón "Guardar"
+    Then el sistema rechaza la operación
+    And muestra un mensaje de error: "⚠️ El código de barras <Codigo> ya está registrado. Por favor, verifica."
+    And el campo del código se resalta con un borde rojo
+
+    Examples:
+      | Codigo        |
+      | 7501031311309 |
+      | 7501000123401 |
 
   Scenario Outline: Revisar reportes de errores de usuarios
     Given que un usuario ha enviado un reporte de error desde la aplicación
@@ -45,10 +68,8 @@ Feature: US12 Administración de base de datos y gestión de feedback
     And el sistema notifica al usuario que su reporte fue atendido
 
     Examples:
-
       | Estado        |
       | Resuelto      |
       | En revisión   |
-
 
 
